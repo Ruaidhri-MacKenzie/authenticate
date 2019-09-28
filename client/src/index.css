@@ -1,0 +1,15 @@
+:root {
+	/* Variables */
+	--dark: #212121;
+	--darker: #1c1811;
+	--darkest: #0b0700;
+	--light: #f2f3f4;
+	--lighter: #f2f3f4;
+	--lightest: #f2f3f4;
+}
+
+*, *::before, *::after {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}

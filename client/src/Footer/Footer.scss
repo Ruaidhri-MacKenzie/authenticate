@@ -1,0 +1,16 @@
+.footer {
+	grid-area: footer;
+	padding: 1em;
+	background-color: var(--darker);
+	text-align: center;
+
+	&__copyright {
+		color: var(--light);
+		cursor: default;
+	}
+	
+	&__link {
+		text-decoration: none;
+		color: var(--light);
+	}
+}

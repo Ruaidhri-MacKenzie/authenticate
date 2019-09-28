@@ -1,0 +1,18 @@
+.tab-bar {
+	width: auto;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+	&__tab {
+		padding: 1rem 3rem;
+		cursor: pointer;
+		background-color: var(--darker);
+		color: var(--light);
+		font-size: 1.5rem;
+	}
+
+	&__tab--active {
+		background-color: var(--dark);
+	}
+}

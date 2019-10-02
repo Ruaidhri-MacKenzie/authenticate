@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import './AuthForm.scss';
 
-const AuthForm = ({ signUp }) => {
+const AuthForm = ({ signUp, setToken }) => {
 	const AuthFormName = (signUp) ? "Sign Up" : "Sign In";
 
 	const [state, setState] = useState({username: "", password: "", email: ""});
@@ -26,7 +26,12 @@ const AuthForm = ({ signUp }) => {
 		// Send post request to sign up
 		const route = (signUp) ? 'signup' : 'signin';
 		const data = (signUp) ? {username, password, email} : {username, password};
-		axios.post('/user/' + route, data);
+		axios.post('http://localhost:2000/user/' + route, data)
+		.then(token => {
+			// Store token
+			setToken(token);
+			console.log(token);
+		});
 	};
 
 	const handleChange = e => setState({...state, [e.target.name]: e.target.value});

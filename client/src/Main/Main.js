@@ -1,17 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './Main.scss';
 
-import AuthForm from '../AuthForm/AuthForm';
-import TabBar from '../TabBar/TabBar';
-
 const Main = () => {
-	const [signUp, setSignUp] = useState(true);
-	const toggleSignUp = () => setSignUp(!signUp);
-	
 	return (
 		<main className="main">
-			<TabBar toggleSignUp={toggleSignUp} />
-			<AuthForm signUp={signUp} />
+			<h1>MAIN MENU</h1>
+			<button>Select Character</button>
+			<button>Options</button>
+			<button>Sign Out</button>
 		</main>
 	);
 };

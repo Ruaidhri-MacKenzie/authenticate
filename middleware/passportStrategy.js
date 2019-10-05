@@ -1,6 +1,10 @@
+const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 const User = require('../models/userModel');
+
+passport.serializeUser((user, cb) => cb(null, user.id));
+passport.deserializeUser((id, cb) => User.findById(id, (err, user) => cb(err, user)));
 
 const localStrategy = new LocalStrategy((username, password, done) => {
 	username = username.trim();
@@ -10,7 +14,7 @@ const localStrategy = new LocalStrategy((username, password, done) => {
 	User.findOne({ username: username }, (err, user) => {
 		if (err) return done(err);
 		if (!user) return done(null, false, { message: "Authentication failed"});
-
+		
 		bcrypt.compare(password, user.password, (err, match) => {
 			if (err) return done(err);
 			if (match) return done(null, user);

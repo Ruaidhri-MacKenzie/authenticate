@@ -5,9 +5,8 @@ import './Dash.scss';
 import Characters from '../../components/Characters/Characters';
 import Options from '../../components/Options/Options';
 
-const Dash = ({ user, setUser }) => {
+const Dash = ({ signOut, user }) => {
 	const handleSubmit = e => e.preventDefault();
-	const signOut = () => setUser(null);
 
 	return (
 		<main className="dash">
@@ -20,12 +19,12 @@ const Dash = ({ user, setUser }) => {
 
 				<div className="dash-menu__btns">
 					<NavLink exact className="dash-menu__link" activeClassName="dash-menu__link--active" to={'/dash'}>
-						<button className="dash-menu__btn">Characters</button>
+						Characters
 					</NavLink>
 					<NavLink exact className="dash-menu__link" activeClassName="dash-menu__link--active" to={'/dash/options'}>
-						<button className="dash-menu__btn">Options</button>
+						Options
 					</NavLink>
-					<Link to={'/'}><button className="dash-menu__btn" onClick={signOut}>Sign Out</button></Link>
+					<Link className="dash-menu__link" to={'/'} onClick={signOut}>Sign Out</Link>
 				</div>
 			</form>
 		</main>

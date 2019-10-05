@@ -16,8 +16,8 @@
 	
 	&:hover {
 		background-color: var(--darker);
-		border: 2px solid #f80;
-		box-shadow: 6px 6px 6px #000;
+		border: 2px solid var(--highlight);
+		box-shadow: 6px 6px 6px var(--darkest);
 	}
 
 	&__link {

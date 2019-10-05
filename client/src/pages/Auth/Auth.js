@@ -5,7 +5,7 @@ import './Auth.scss';
 import TabBar from '../../components/TabBar/TabBar';
 import Loading from '../../components/Loading/Loading';
 
-const Auth = ({ setUser }) => {
+const Auth = ({ signIn }) => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
 	const createError = message => {
@@ -13,52 +13,68 @@ const Auth = ({ setUser }) => {
 		setTimeout(() => setError(null), 1500);
 	};
 
-	const [signUp, setSignUp] = useState(true);
-	const toggleSignUp = () => setSignUp(!signUp);
-	const AuthFormName = (signUp) ? "Sign Up" : "Sign In";
+	const [inputs, setInputs] = useState({username: "", password: "", email: ""});
+	const { username, password, email } = inputs;
 
-	const [state, setState] = useState({username: "", password: "", email: ""});
-	const { username, password, email } = state;
+	const [isSignUp, setIsSignUp] = useState(true);
+	const toggleSignUp = () => setIsSignUp(!isSignUp);
+	const AuthFormName = (isSignUp) ? "Sign Up" : "Sign In";
 
-	const sendData = () => {
-		// Validate inputs
+	const validateInputs = ({ username, password, email }) => {
 		if (!username) {
 			createError("Username is required");
-			return;
+			return false;
 		}
-		if (!password) {
+		else if (username.length > 25) {
+			createError("Username is too long");
+			return false;
+		}
+		else if (username.length < 3) {
+			createError("Username is too short");
+			return false;
+		}
+		else if (!password) {
 			createError("Password is required");
-			return;
+			return false;
 		}
-		if (signUp && !email) {
+		else if (password.length < 8) {
+			createError("Password is too short");
+			return false;
+		}
+		else if (isSignUp && !email) {
 			createError("Email is required");
-			return;
+			return false;
 		}
+		else {
+			return true;
+		}
+	};
 
-		// Send post request to sign up
-		const route = (signUp) ? 'signup' : 'signin';
-		const data = (signUp) ? {username, password, email} : {username, password};
+	const sendData = ({ username, password, email}) => {
+		username = username.trim();
+		if (!validateInputs({ username, password, email })) return;
+
+		const route = (isSignUp) ? 'signup' : 'signin';
+		const data = (isSignUp) ? {username, password, email} : {username, password};
 		setLoading(true);
 		axios.post('http://localhost:2000/auth/' + route, data)
 		.then(response => {
-			console.log(response);
 			setLoading(false);
-			setUser(response.data);
+			signIn(response.data);
 		})
 		.catch(err => {
-			console.log(err);
 			setLoading(false);
-			createError((err.response) ? err.response.data.message : "Error");
+			createError(err.response.data.message);
 		});
 	};
 
-	const handleChange = e => setState({...state, [e.target.name]: e.target.value});
+	const handleChange = e => setInputs({...inputs, [e.target.name]: e.target.value});
 	const handleSubmit = e => {
 		e.preventDefault();
-		sendData();
+		sendData({ username, password, email });
 	};
 
-	const renderInput = (state, name, type) => {
+	const renderInput = (input, name, type) => {
 		const capitalise = string => string[0].toUpperCase() + string.slice(1);
 		
 		return (
@@ -67,7 +83,7 @@ const Auth = ({ setUser }) => {
 				name={name}
 				type={type}
 				placeholder={capitalise(name)}
-				value={state}
+				value={input}
 				onChange={handleChange}
 			/>
 		);
@@ -80,7 +96,7 @@ const Auth = ({ setUser }) => {
 				<h2 className="auth-form__title">{AuthFormName}</h2>
 				{renderInput(username, "username", "text")}
 				{renderInput(password, "password", "password")}
-				{signUp && renderInput(email, "email", "email")}
+				{isSignUp && renderInput(email, "email", "email")}
 				{error && <p className="auth-form__fail">{error}</p>}
 				<button className="auth-form__submit">{AuthFormName}</button>
 				{loading && <Loading />}

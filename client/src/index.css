@@ -1,15 +1,30 @@
 :root {
 	/* Variables */
+	--main-font: Baumans;
 	--dark: #212121;
 	--darker: #1c1811;
 	--darkest: #0b0700;
 	--light: #f2f3f4;
-	--lighter: #f2f3f4;
-	--lightest: #f2f3f4;
+	--lighter: #fafbfc;
+	--lightest: #ffffff;
+	--dark-trans: #212121cc;
+	--darker-trans: #1c1811cc;
+	--darkest-trans: #0b0700cc;
+	--light-trans: #f2f3f4cc;
+	--lighter-trans: #fafbfccc;
+	--lightest-trans: #ffffffcc;
 }
 
 *, *::before, *::after {
 	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
+}
+
+ul {
+	list-style-type: none;
+}
+
+a {
+	text-decoration: none;
 }

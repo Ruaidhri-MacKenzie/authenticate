@@ -4,15 +4,17 @@
 	--dark: #212121;
 	--darker: #1c1811;
 	--darkest: #0b0700;
-	--light: #f2f3f4;
-	--lighter: #fafbfc;
-	--lightest: #ffffff;
 	--dark-trans: #212121cc;
 	--darker-trans: #1c1811cc;
 	--darkest-trans: #0b0700cc;
+	--light: #f2f3f4;
+	--lighter: #fafbfc;
+	--lightest: #ffffff;
 	--light-trans: #f2f3f4cc;
 	--lighter-trans: #fafbfccc;
 	--lightest-trans: #ffffffcc;
+	--highlight: #ff8800;
+	--highlight-trans: #ff8800cc;
 }
 
 *, *::before, *::after {

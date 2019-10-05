@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const characterSchema = new mongoose.Schema({
+	user: {type: mongoose.SchemaTypes.ObjectId, ref: 'User', required: true},
 	name: { type: String, required: true, unique: true },
 	sprite: { type: Number, default: 1},
 	level: { type: Number, default: 1},

@@ -1,0 +1,26 @@
+.chars {
+	margin: 2em 0;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-evenly;
+}
+
+.char {
+	margin: 1em;
+	padding: 2em 3em;
+	cursor: pointer;
+	background-color: var(--darkest-trans);
+	border: 2px solid var(--light);
+	border-radius: 10px;
+	box-shadow: 8px 8px 8px var(--darkest);
+	
+	&:hover {
+		background-color: var(--darker);
+		border: 2px solid #f80;
+		box-shadow: 6px 6px 6px #000;
+	}
+
+	&__link {
+		color: var(--light);
+	}
+}

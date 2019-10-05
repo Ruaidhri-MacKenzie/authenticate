@@ -1,0 +1,35 @@
+.loading {
+	--colour1: #000;
+	--colour2: #f80;
+	
+	width: 2rem;
+	height: 2rem;
+	margin: 1em;
+	border: 3px solid var(--colour1);
+	border-radius: 50%;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	align-self: flex-end;
+
+	&::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		border-top: 3px solid var(--colour2);
+		border-right: 3px solid var(--colour2);
+		border-radius: 50%;
+		animation: spin 750ms infinite;
+	}
+}
+
+@keyframes spin {
+	0% {border-top: 3px solid var(--colour2); border-right: 3px solid var(--colour2); border-bottom: none; border-left: none;}
+	25% {border-right: 3px solid var(--colour2); border-bottom: 3px solid var(--colour2); border-left: none; border-top: none;}
+	50% {border-bottom: 3px solid var(--colour2); border-left: 3px solid var(--colour2); border-top: none; border-right: none;}
+	75% {border-left: 3px solid var(--colour2); border-top: 3px solid var(--colour2); border-right: none; border-bottom: none;}
+	100% {border-top: 3px solid var(--colour2); border-right: 3px solid var(--colour2); border-bottom: none; border-left: none;}
+}

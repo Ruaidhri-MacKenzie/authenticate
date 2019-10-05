@@ -1,6 +1,6 @@
 .loading {
-	--colour1: #000;
-	--colour2: #f80;
+	--colour1: var(--darkest);
+	--colour2: var(--highlight);
 	
 	width: 2rem;
 	height: 2rem;

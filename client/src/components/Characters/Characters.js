@@ -17,10 +17,22 @@ const Character = ({ character }) => {
 		</Link>
 	);
 };
+
+const NewCharacter = () => {
+	return (
+		<Link className="new-char__link" to={"/dash/character"}>
+			<div className="new-char">
+				<p className="new-char__text">New Character</p>
+			</div>
+		</Link>
+	);
+};
+
 const Characters = ({ characters }) => {
 	return (
 		<div className="chars">
 			{characters.map(character => <Character key={character.name} character={character} />)}
+			<NewCharacter />
 		</div>
 	);
 };

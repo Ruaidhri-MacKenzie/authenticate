@@ -1,9 +1,11 @@
 const bcrypt = require('bcrypt');
 const passport = require('passport');
-const User = require('../models/userModel');
-const Character = require('../models/characterModel');
+const userController = require('../controllers/userController');
+const characterController = require('../controllers/characterController');
 
-const signUp = async (req, res, next) => {
+const authHandler = {};
+
+authHandler.signUp = async (req, res, next) => {
 	const { password, email } = req.body;
 	const username = req.body.username.trim();
 
@@ -35,49 +37,43 @@ const signUp = async (req, res, next) => {
 		return;
 	}
 	
-	const users = await User.find({ username: { $regex: new RegExp(username, "i") } }).exec();	// Case insensitive regex
-	if (users.length > 0) {
-		res.status(409).json({ message: "Username already exists."});
+	const existingUser = await userController.checkExistingUsername(username);
+	if (existingUser) {
+		res.status(409).json({message: "Username already exists"});
 		return;
 	}
 	
-	bcrypt.hash(password, 10, (err, hash) => {
-		if (err) {
-			res.status(500).json(err);
-		}
-		else {
-			const user = new User({
-				username,
-				password: hash,
-				email,
-			});
-		
-			user.save()
-			.then(result => res.status(201).json(user))
-			.catch(err => res.status(500).json(err));
-		}
-	});
+	const hash = await bcrypt.hash(password, 10);
+	if (!hash) {
+		res.status(500).json({message: "Create new user failed"});
+		return;
+	}
+
+	const user = await userController.create(username, hash, email);
+	if (!user) {
+		res.status(500).json({message: "Create new user failed"});
+		return;
+	}
+
+	res.status(201).json(user);
 };
 
-const signIn = (req, res, next) => {
-	passport.authenticate('local', (err, user, info) => {
+authHandler.signIn = (req, res, next) => {
+	passport.authenticate('local', async (err, user, info) => {
 		if (err) return next(err);
 		if (!user) return res.status(404).json({message: "Authentication failed"});
-
+		
 		const { _id, username, email } = user;
-		Character.find({ user: _id }).exec()
-		.then(characters => res.status(200).json({ _id, username, email, characters }))
-		.catch(err => res.status(500).json(err));
+		const characters = await characterController.findByUser(_id);
+		res.status(200).json({ _id, username, email, characters, session: req.session });
+		
+		userController.updateLastLogin(_id);
 	})(req, res, next);
 };
 
-const signOut = (req, res, next) => {
+authHandler.signOut = (req, res, next) => {
 	console.log("SIGNED OUT");
 	req.logout();
 };
 
-module.exports = {
-	signUp,
-	signIn,
-	signOut,
-};
+module.exports = authHandler;

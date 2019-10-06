@@ -37,7 +37,7 @@ const Auth = ({ signIn }) => {
 			createError("Password is required");
 			return false;
 		}
-		else if (password.length < 8) {
+		else if (password.length < 3) {
 			createError("Password is too short");
 			return false;
 		}
@@ -97,7 +97,7 @@ const Auth = ({ signIn }) => {
 				{renderInput(username, "username", "text")}
 				{renderInput(password, "password", "password")}
 				{isSignUp && renderInput(email, "email", "email")}
-				{error && <p className="auth-form__fail">{error}</p>}
+				{error && <p className="auth-form__error">{error}</p>}
 				<button className="auth-form__submit">{AuthFormName}</button>
 				{loading && <Loading />}
 			</form>

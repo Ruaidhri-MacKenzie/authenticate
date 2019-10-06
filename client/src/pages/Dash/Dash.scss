@@ -15,13 +15,19 @@
 	min-width: 800px;
 	min-height: 600px;
 	padding: 2.5em 3em 2em;
-	display: flex;
-	flex-direction: column;
+	display: grid;
+	grid-template-rows: auto auto 1fr auto;
+	grid-template-areas:
+		"title"
+		"username"
+		"display"
+		"buttons";
 	background-color: var(--darkest-trans);
 	color: var(--light);
 	box-shadow: 4px 4px 4px var(--darkest);
 
 	&__title {
+		grid-area: title;
 		margin-bottom: 0.5em;
 		padding: 0.5em;
 		cursor: default;
@@ -39,6 +45,7 @@
 	}
 	
 	&__username {
+		grid-area: username;
 		margin: 0.5em;
 		padding: 0.25em;
 		cursor: default;
@@ -50,7 +57,12 @@
 		font-size: 1.5rem;
 	}
 
+	&__display {
+		grid-area: display;
+	}
+
 	&__btns {
+		grid-area: buttons;
 		margin-top: auto;
 		display: flex;
 		justify-content: space-evenly;

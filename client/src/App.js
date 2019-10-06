@@ -28,7 +28,7 @@ const App = () => {
 				console.log("Disconnected from Socket IO");
 			});
 		}
-	}, [socket])
+	}, [socket]);
 
 	const signIn = user => {
 		setUser(user);

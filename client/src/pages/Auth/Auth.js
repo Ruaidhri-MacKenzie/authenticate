@@ -5,7 +5,7 @@ import './Auth.scss';
 import TabBar from '../../components/TabBar/TabBar';
 import Loading from '../../components/Loading/Loading';
 
-const Auth = ({ signIn }) => {
+const Auth = ({ setShowLogin, signIn }) => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
 	const createError = message => {
@@ -16,10 +16,10 @@ const Auth = ({ signIn }) => {
 	const [inputs, setInputs] = useState({username: "", password: "", email: ""});
 	const { username, password, email } = inputs;
 
-	const [isSignUp, setIsSignUp] = useState(true);
+	const [isSignUp, setIsSignUp] = useState(false);
 	const toggleSignUp = () => setIsSignUp(!isSignUp);
 	const AuthFormName = (isSignUp) ? "Sign Up" : "Sign In";
-
+	
 	const validateInputs = ({ username, password, email }) => {
 		if (!username) {
 			createError("Username is required");
@@ -57,7 +57,7 @@ const Auth = ({ signIn }) => {
 		const route = (isSignUp) ? 'signup' : 'signin';
 		const data = (isSignUp) ? {username, password, email} : {username, password};
 		setLoading(true);
-		axios.post('http://localhost:2000/auth/' + route, data)
+		axios.post('/auth/' + route, data)
 		.then(response => {
 			setLoading(false);
 			signIn(response.data);

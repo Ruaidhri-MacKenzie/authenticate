@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
-import socketIOClient from 'socket.io-client';
 import axios from 'axios';
+import socketIOClient from 'socket.io-client';
 import './App.scss';
 
 import Home from './pages/Home/Home';
@@ -12,11 +11,21 @@ import Game from './pages/Game/Game';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 
-const AuthRoute = ({ auth, render, ...rest }) => <Route {...rest} render={(auth) ? render : () => <Redirect to="/auth" />} />
-const NoAuthRoute = ({ auth, render, ...rest }) => <Route {...rest} render={(!auth) ? render : () => <Redirect to="/dash" />} />
-
 const App = () => {
+	const [showLogin, setShowLogin] = useState(false);
+
 	const [user, setUser] = useState(null);
+	const [character, setCharacter] = useState(null);
+	
+	// Check if session cookie already exists
+	useEffect(() => {
+		axios.get('/auth')
+		.then(response => {
+			if (response) signIn(response.data);
+		})
+		.catch(err => console.log(err));
+	}, []);
+
 	const [socket, setSocket] = useState(null);
 	useEffect(() => {
 		if (socket) {
@@ -36,23 +45,36 @@ const App = () => {
 	};
 
 	const signOut = () => {
-		axios.post('http://localhost:2000/auth/signout');
-		socket.disconnect();
-		setUser(null);
-		setSocket(null);
+		axios.post('/auth/signout')
+		.then(response => {
+			setUser(null);
+			setCharacter(null);
+			socket.disconnect();
+			setSocket(null);
+		})
+		.catch(err => console.log(err));
+	};
+
+	const logIn = id => {
+		// get character data from server
+		setCharacter(true);
+	}
+
+	const logOut = () => {
+		setCharacter(null);
+	}
+
+	const renderMain = () => {
+		if (user && character) return <Game user={user} character={character} logOut={logOut} />
+		else if (user) return <Dash user={user} signOut={signOut} logIn={logIn} />
+		else if (showLogin) return <Auth setShowLogin={setShowLogin} signIn={signIn} />
+		else return <Home setShowLogin={setShowLogin} />
 	};
 
   return (
     <div className="App">
 			<Header title="User Authentication" subtitle="Testing user authentication with React" />
-			<Router>
-				<Switch>
-					<Route exact path='/' component={Home} />
-					<NoAuthRoute exact path='/auth' auth={!!user} render={() => <Auth signIn={signIn} />} />
-					<AuthRoute path='/dash' auth={!!user} render={() => <Dash signOut={signOut} user={user} />} />
-					<AuthRoute path='/game' auth={!!user} render={() => <Game user={user} />} />
-				</Switch>
-			</Router>
+			{renderMain()}
 			<Footer />
     </div>
   );

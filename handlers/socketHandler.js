@@ -5,9 +5,18 @@ const itemController = require('../controllers/itemController');
 const tilemapController = require('../controllers/tilemapController');
 
 const socketHandler = socket => {
-	socket.on('disconnect', reason => console.log("User disconnected: " + reason));
+	socket.on('disconnect', reason => console.log("Socket disconnected: " + reason));
 	
 	// Player commands
+	socket.on('logIn', async id => {
+		// Read from database, add to player list, start receiving updates
+		socket.emit('logIn', true);
+	});
+	socket.on('logOut', async id => {
+		// Remove from player list, stop receiving updates, save to database
+		socket.emit('logOut', true);
+	});
+
 	socket.on('createCharacter', async data => {
 		const { user, role } = data;
 		const name = (data.name) ? data.name.trim() : "";
@@ -42,8 +51,8 @@ const socketHandler = socket => {
 		const result = await characterController.create(data);
 		socket.emit('createCharacter', result);
 	});
-	socket.on('deleteCharacter', async data => {
-		const char = await characterController.read(data._id);
+	socket.on('deleteCharacter', async id => {
+		const char = await characterController.read(id);
 		if (socket.user._id === char.user) {
 			const result = await char.delete();
 			socket.emit('deleteCharacter', result);
@@ -108,8 +117,8 @@ const socketHandler = socket => {
 		const result = await roleController.update(data);
 		socket.emit('updateRole', result);
 	});
-	socket.on('deleteRole', async data => {
-		const result = await roleController.delete(data._id);
+	socket.on('deleteRole', async id => {
+		const result = await roleController.delete(id);
 		socket.emit('deleteRole', result);
 	});
 
@@ -154,8 +163,8 @@ const socketHandler = socket => {
 		const result = await npcController.update(data);
 		socket.emit('updateNPC', result);
 	});
-	socket.on('deleteNPC', async data => {
-		const result = await npcController.delete(data._id);
+	socket.on('deleteNPC', async id => {
+		const result = await npcController.delete(id);
 		socket.emit('deleteNPC', result);
 	});
 
@@ -200,8 +209,8 @@ const socketHandler = socket => {
 		const result = await itemController.update(data);
 		socket.emit('updateItem', result);
 	});
-	socket.on('deleteItem', async data => {
-		const result = await itemController.delete(data._id);
+	socket.on('deleteItem', async id => {
+		const result = await itemController.delete(id);
 		socket.emit('deleteItem', result);
 	});
 	
@@ -249,8 +258,8 @@ const socketHandler = socket => {
 		const result = await itemController.update(data);
 		socket.emit('updateTilemap', result);
 	});
-	socket.on('deleteTilemap', async data => {
-		const result = await itemController.delete(data._id);
+	socket.on('deleteTilemap', async id => {
+		const result = await itemController.delete(id);
 		socket.emit('deleteTilemap', result);
 	});
 };

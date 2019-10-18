@@ -1,26 +1,20 @@
-const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 const User = require('../models/userModel');
 
-passport.serializeUser((user, cb) => cb(null, user.id));
-passport.deserializeUser((id, cb) => User.findById(id, (err, user) => cb(err, user)));
-
-const localStrategy = new LocalStrategy((username, password, done) => {
+module.exports = new LocalStrategy((username, password, done) => {
 	username = username.trim();
 	if (!username) return done(null, false, { message: "Username is required"});
 	if (!password) return done(null, false, { message: "Password is required"});
 	
-	User.findOne({ username: username }, (err, user) => {
+	User.findOne({ username: { $regex: new RegExp("^" + username + "$", "i") } }, (err, user) => {
 		if (err) return done(err);
 		if (!user) return done(null, false, { message: "Authentication failed"});
 		
 		bcrypt.compare(password, user.password, (err, match) => {
 			if (err) return done(err);
-			if (match) return done(null, user);
-			else return done(null, false, { message: "Authentication failed"});
+			if (!match) return done(null, false, { message: "Authentication failed"});
+			else return done(null, user);
 		});
 	});
 });
-
-module.exports = localStrategy;

@@ -1,37 +1,32 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import './Characters.scss';
 
-const Character = ({ character }) => {
+const Character = ({ character, logIn }) => {
 	const { sprite, name, role, level } = character;
 
 	return (
-		<Link className="char__link" to={"/game/" + name}>
-			<div className="char">
-				<div className="char__sprite">Sprite: {sprite}</div>
-				<p className="char__name">{name}</p>
-				<p className="char__role">{role}</p>
-				<p className="char__level">Level {level}</p>
-			</div>
-		</Link>
+		<button className="char" onClick={e => logIn(character)}>
+			<div className="char__sprite">Sprite: {sprite}</div>
+			<p className="char__name">{name}</p>
+			<p className="char__role">{role}</p>
+			<p className="char__level">Level {level}</p>
+		</button>
 	);
 };
 
-const NewCharacter = () => {
+const NewCharacter = ({ handleClick }) => {
 	return (
-		<Link className="new-char__link" to={"/dash/character"}>
-			<div className="new-char">
-				<p className="new-char__text">New Character</p>
-			</div>
-		</Link>
+		<button name="create" className="new-char" onClick={handleClick}>
+			<p className="new-char__text">New Character</p>
+		</button>
 	);
 };
 
-const Characters = ({ characters }) => {
+const Characters = ({ characters, handleClick }) => {
 	return (
 		<div className="chars">
-			{characters.map(character => <Character key={character.name} character={character} />)}
+			{characters && characters.map(character => <Character key={character.name} character={character} handleClick={handleClick} />)}
 			<NewCharacter />
 		</div>
 	);

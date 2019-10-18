@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import './Auth.scss';
 
-import TabBar from '../../components/TabBar/TabBar';
-import Loading from '../../components/Loading/Loading';
+import TabBar from './TabBar';
+import Loading from '../components/Loading/Loading';
 
-const Auth = ({ setShowLogin, signIn }) => {
+const Auth = ({ setShowAuth, signIn }) => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
 	const createError = message => {

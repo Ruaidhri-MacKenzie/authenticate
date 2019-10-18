@@ -1,7 +1,5 @@
 import React from 'react';
 
-import './Characters.scss';
-
 const Character = ({ character, logIn }) => {
 	const { sprite, name, role, level } = character;
 
@@ -23,13 +21,13 @@ const NewCharacter = ({ handleClick }) => {
 	);
 };
 
-const Characters = ({ characters, handleClick }) => {
+const CharacterList = ({ characters, handleClick, logIn }) => {
 	return (
-		<div className="chars">
-			{characters && characters.map(character => <Character key={character.name} character={character} handleClick={handleClick} />)}
-			<NewCharacter />
+		<div className="char-list">
+			{characters && characters.map(character => <Character key={character.name} character={character} logIn={logIn} />)}
+			<NewCharacter handleClick={handleClick} />
 		</div>
 	);
 };
 
-export default Characters;
+export default CharacterList;

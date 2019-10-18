@@ -1,24 +1,25 @@
 import React, { useState } from 'react';
 import './Dash.scss';
 
-import Characters from '../../components/Characters/Characters';
-import Options from '../../components/Options/Options';
-import CreateCharacter from '../../components/CreateCharacter/CreateCharacter';
+import CharacterList from './CharacterList';
+import Options from './Options';
+import CreateCharacter from './CreateCharacter';
 
-const Dash = ({ signOut, user, logIn }) => {
+const Dash = ({ user, characters, signOut, logIn, createCharacter }) => {
 	const [state, setState] = useState("characters");
-	const handleClick = e => setState(e.target.name);
+
+	const handleClick = e => {
+		const activeBtn = document.querySelector(".dash-menu__link--active");
+		if (activeBtn) activeBtn.classList.remove("dash-menu__link--active");
+		if (e.target.classList.contains(".dash-menu__link")) e.target.classList.add("dash-menu__link--active");
+
+		setState(e.target.name);
+	};
 
 	const renderMain = () => {
-		if (state === "characters") {
-			return <Characters characters={user.characters} handleClick={handleClick} logIn={logIn} />
-		}
-		else if (state === "options") {
-			return <Options />
-		}
-		else if (state === "create") {
-			return <CreateCharacter />
-		}
+		if (state === "characters") return <CharacterList characters={characters} handleClick={handleClick} logIn={logIn} />
+		else if (state === "options") return <Options />
+		else if (state === "create") return <CreateCharacter createCharacter={createCharacter} />
 	};
 
 	return (

@@ -1,17 +1,13 @@
 import React, { useState } from 'react';
-import './CreateCharacter.scss';
 
-const CreateCharacter = ({ user, socket }) => {
+const CreateCharacter = ({ createCharacter }) => {
 	const [error, setError] = useState(null);
-
 	const [inputs, setInputs] = useState({ name: "", role: "" });
-	const { name, role } = inputs;
 	
 	const handleChange = e => setInputs({ ...inputs, [e.target.name]: e.target.value });
 	const handleSubmit = e => {
 		e.preventDefault();
-		if (!verifyInputs({name, role})) return;
-		sendData({name, role});
+		if (verifyInputs(inputs)) createCharacter(inputs);
 	};
 	
 	const verifyInputs = ({ name, role }) => {
@@ -37,15 +33,10 @@ const CreateCharacter = ({ user, socket }) => {
 		}
 	};
 
-	const sendData = ({ name, role }) => {
-		name = name.trim();
-		socket.emit('createCharacter', {userId: user._id, name, role});
-	};
-
 	return (
 		<form className="create-char" onSubmit={handleSubmit}>
-			<input className="create-char__input" type="text" name="name" placeholder="Name" value={name} onChange={handleChange} />
-			<input className="create-char__input" type="text" name="role" placeholder="Role" value={role} onChange={handleChange} />
+			<input className="create-char__input" type="text" name="name" placeholder="Name" value={inputs.name} onChange={handleChange} />
+			<input className="create-char__input" type="text" name="role" placeholder="Role" value={inputs.role} onChange={handleChange} />
 			{error && <p className="create-char__error">{error}</p>}
 			<button className="create-char__submit">Submit</button>
 		</form>

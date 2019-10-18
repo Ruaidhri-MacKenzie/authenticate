@@ -1,12 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import './Home.scss';
 
-const Home = () => {
+const Home = ({ setShowLogin }) => {
 	return (
 		<main className="home">
 			<h1>Home Page</h1>
-			<Link to="/auth">Sign Up/Sign In</Link>			
+			<button onClick={e => setShowLogin(true)}>Sign Up/Sign In</button>
 		</main>
 	);
 };

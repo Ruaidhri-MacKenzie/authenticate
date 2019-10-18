@@ -12,5 +12,9 @@
 	&__link {
 		text-decoration: none;
 		color: var(--light);
+
+		&:hover {
+			text-decoration: underline;
+		}
 	}
 }

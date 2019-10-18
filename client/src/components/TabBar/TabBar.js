@@ -13,8 +13,8 @@ const TabBar = ({ toggleSignUp }) => {
 
 	return (
 		<ul className="tab-bar">
-			<li className="tab-bar__tab tab-bar__tab--active" onClick={handleClick}>Sign Up</li>
-			<li className="tab-bar__tab" onClick={handleClick}>Sign In</li>
+			<li className="tab-bar__tab tab-bar__tab--active" onClick={handleClick}>Sign In</li>
+			<li className="tab-bar__tab" onClick={handleClick}>Sign Up</li>
 		</ul>
 	);
 };

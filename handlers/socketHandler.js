@@ -5,6 +5,22 @@ const itemController = require('../controllers/itemController');
 const tilemapController = require('../controllers/tilemapController');
 
 const socketHandler = socket => {
+	const sendDashInfo = async () => {
+		const id = socket.handshake.session.passport.user;
+		const characters = await characterController.findByUser(id);
+		const roles = await roleController.readAll();
+		// await Promise.all([characters, roles]);
+
+		if (roles && roles.length > 0) {
+			socket.emit('getDashInfo', { characters, roles });
+		}
+		else {
+			const role = await roleController.create({name: "Knight"});
+			socket.emit('getDashInfo', { characters, roles: [role] });
+		}
+	};
+	sendDashInfo();
+
 	socket.on('disconnect', reason => console.log("Socket disconnected: " + reason));
 	
 	// Player commands
@@ -18,51 +34,62 @@ const socketHandler = socket => {
 	});
 
 	socket.on('createCharacter', async data => {
-		const { user, role } = data;
+		const user = socket.handshake.session.passport.user;
 		const name = (data.name) ? data.name.trim() : "";
+		const { role } = data;
 	
-		if (!user) {
-			console.log("UserId is required");
+		let error = null;
+		if (!user) error = "UserId is required";
+		else if (!name) error = "Name is required";
+		else if (name.length > 25) error = "Name is too long";
+		else if (name.length < 3) error = "Name is too short";
+		else if (!role) error = "Role is required";
+		if (error) {
+			console.log(error);
 			return;
 		}
-		if (!name) {
-			console.log("Name is required");
-			return;
-		}
-		if (name.length > 25) {
-			console.log("Name is too long");
-			return;
-		}
-		if (name.length < 3) {
-			console.log("Name is too short");
-			return;
-		}
-		if (!role) {
-			console.log("Role is required");
-			return;
-		}
-	
+
 		const existingName = await characterController.checkExistingName(name);
 		if (existingName) {
 			console.log("Name already exists");
 			socket.emit('createCharacter', false);
 			return;
 		}
-		const result = await characterController.create(data);
-		socket.emit('createCharacter', result);
+
+		const newChar = await characterController.create({user, name, role});
+		if (!newChar) {
+			console.log("Failed to create character");
+			socket.emit('createCharacter', false);
+			return;
+		}
+
+		const character = await characterController.read(newChar._id);
+		socket.emit('createCharacter', character);
 	});
 	socket.on('deleteCharacter', async id => {
+		const userId = socket.handshake.session.passport.user;
 		const char = await characterController.read(id);
-		if (socket.user._id === char.user) {
-			const result = await char.delete();
-			socket.emit('deleteCharacter', result);
+		if (!char) {
+			console.log("Failed to read character");
+			socket.emit('deleteCharacter', false);
+			return;
 		}
-		else {
+		if (userId && ""+char.user !== ""+userId) {
 			console.log("Attempt to delete unowned character");
 			socket.emit('deleteCharacter', false);
+			return;
 		}
+
+		const charId = char._id;
+		const result = await char.delete();
+		if (!result) socket.emit('deleteCharacter', false);
+		else socket.emit('deleteCharacter', charId);
 	});
 
+	socket.on('getDashInfo', async () => {
+
+	});
+	
 	// Admin commands
 	socket.on('createRole', async data => {
 		const name = (data.name) ? data.name.trim() : "";

@@ -1,0 +1,24 @@
+@keyframes animate {
+	0% {background-position-x: calc(-1 * var(--frame1) * var(--tilesize));}
+	50% {background-position-x: calc(-1 * var(--frame2) * var(--tilesize));}
+}
+@keyframes spin {
+	0% {--frame1: 0; --frame2: 1;}
+	25% {--frame1: 6; --frame2: 7;}
+	50% {--frame1: 3; --frame2: 4;}
+	75% {--frame1: 9; --frame2: 10;}
+}
+@keyframes spin-reverse {
+	0% {--frame1: 0; --frame2: 1;}
+	25% {--frame1: 9; --frame2: 10;}
+	50% {--frame1: 3; --frame2: 4;}
+	75% {--frame1: 6; --frame2: 7;}
+}
+
+.sprite-preview {
+	--frame1: 0;
+	--frame2: 0;
+	animation-duration: 500ms, 8s;
+	animation-iteration-count: infinite;
+	animation-timing-function: step-end;
+}

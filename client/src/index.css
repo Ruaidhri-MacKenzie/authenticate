@@ -16,7 +16,9 @@
 	--highlight: #ff8800;
 	--highlight-trans: #ff8800cc;
 	--warning: #ff0000;
-	--warning-trans: #ff0000cc;
+	--warning-trans: #ff000033;
+
+	--tilesize: 32px;
 }
 
 *, *::before, *::after {

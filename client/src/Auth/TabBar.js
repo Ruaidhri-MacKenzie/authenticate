@@ -1,5 +1,4 @@
 import React from 'react';
-import './TabBar.scss';
 
 const TabBar = ({ toggleSignUp }) => {
 	const handleClick = e => {

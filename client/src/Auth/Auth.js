@@ -1,16 +1,27 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 import './Auth.scss';
+import axios from 'axios';
+import socketIOClient from 'socket.io-client';
 
 import TabBar from './TabBar';
 import Loading from '../components/Loading/Loading';
+import useGlobalState from '../App/state';
+import config from '../App/config';
 
-const Auth = ({ setShowAuth, signIn }) => {
+const Auth = () => {
+	const [state, dispatch] = useGlobalState();
+	if (state) {}
+
+	const signIn = user => {
+		const socket = socketIOClient(config.SERVER_URI);
+		dispatch({ type: 'signIn', user, socket });
+	};
+
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
 	const createError = message => {
 		setError(message);
-		setTimeout(() => setError(null), 1500);
+		// setTimeout(() => setError(null), 1500);
 	};
 
 	const [inputs, setInputs] = useState({username: "", password: "", email: ""});
@@ -19,7 +30,16 @@ const Auth = ({ setShowAuth, signIn }) => {
 	const [isSignUp, setIsSignUp] = useState(false);
 	const toggleSignUp = () => setIsSignUp(!isSignUp);
 	const AuthFormName = (isSignUp) ? "Sign Up" : "Sign In";
-	
+
+	// Check if session cookie already exists
+	useEffect(() => {
+		axios.get('/auth')
+		.then(response => {
+			if (response) signIn(response.data);
+		})
+		.catch(err => console.log(err));
+	}, []);
+
 	const validateInputs = ({ username, password, email }) => {
 		if (!username) {
 			createError("Username is required");
@@ -99,7 +119,8 @@ const Auth = ({ setShowAuth, signIn }) => {
 				{isSignUp && renderInput(email, "email", "email")}
 				{error && <p className="auth-form__error">{error}</p>}
 				<button className="auth-form__submit">{AuthFormName}</button>
-				{loading && <Loading />}
+				<div className="auth-form__back" onClick={e => dispatch({ type: 'hideAuth' })}>Back</div>
+				{loading && <Loading className="auth-form__loading" />}
 			</form>
 		</main>
 	);

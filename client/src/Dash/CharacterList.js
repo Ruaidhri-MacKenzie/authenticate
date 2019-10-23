@@ -1,31 +1,47 @@
 import React from 'react';
+import Loading from '../components/Loading/Loading';
+import SpritePreview from '../components/SpritePreview/SpritePreview';
+import useGlobalState from '../App/state';
 
-const Character = ({ character, logIn }) => {
-	const { sprite, name, role, level } = character;
-
+const Character = ({ socket, character }) => {
+	const { _id, sprite, name, role, level } = character;
+	
+	const logIn = e => socket.emit('logIn', _id);
+	const deleteCharacter = e => {
+		e.stopPropagation();
+		if (window.confirm("Are you sure you want to delete " + name + "?")) {
+			socket.emit('deleteCharacter', _id);
+		}
+	};
+	
 	return (
-		<button className="char" onClick={e => logIn(character)}>
-			<div className="char__sprite">Sprite: {sprite}</div>
+		<div className="char" onClick={logIn}>
+			<button className="char__delete" onClick={deleteCharacter}>x</button>
+			<div className="char__sprite"></div>
+			<SpritePreview className="char__sprite" sprite={sprite || role.sprite} />
 			<p className="char__name">{name}</p>
-			<p className="char__role">{role}</p>
+			<p className="char__role">{role.name}</p>
 			<p className="char__level">Level {level}</p>
-		</button>
+		</div>
 	);
 };
 
-const NewCharacter = ({ handleClick }) => {
+const NewCharacter = ({ setView }) => {
 	return (
-		<button name="create" className="new-char" onClick={handleClick}>
+		<div className="new-char" onClick={e => setView("create")}>
 			<p className="new-char__text">New Character</p>
-		</button>
+		</div>
 	);
 };
 
-const CharacterList = ({ characters, handleClick, logIn }) => {
+const CharacterList = ({ setView }) => {
+	const [{ socket, characters, loadingDash }] = useGlobalState();
+
 	return (
 		<div className="char-list">
-			{characters && characters.map(character => <Character key={character.name} character={character} logIn={logIn} />)}
-			<NewCharacter handleClick={handleClick} />
+		{loadingDash && <Loading className="char-list__loading" />}
+		{characters && characters.map(character => <Character key={character.name} socket={socket} character={character} />)}
+		{(!characters || (characters && characters.length < 3)) && <NewCharacter setView={setView} />}
 		</div>
 	);
 };

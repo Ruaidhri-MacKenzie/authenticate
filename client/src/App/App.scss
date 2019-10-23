@@ -11,9 +11,10 @@
 
 .header {
 	grid-area: header;
-	padding: 2em;
+	padding: 1em;
 	background-color: var(--darker);
 	text-align: center;
+	user-select: none;
 
 	&__title {
 		color: var(--light);
@@ -35,6 +36,7 @@
 	&__copyright {
 		color: var(--light);
 		cursor: default;
+		user-select: none;
 	}
 	
 	&__link {

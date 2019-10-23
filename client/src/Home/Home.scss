@@ -3,4 +3,18 @@
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+
+	&__title {
+		cursor: default;
+		user-select: none;
+	}
+
+	&__btn {
+		margin: 1em;
+		padding: 0.5em 1em;
+		cursor: pointer;
+		user-select: none;
+		border-radius: 10px;
+		font-size: 2rem;
+	}
 }

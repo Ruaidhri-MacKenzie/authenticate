@@ -1,16 +1,13 @@
 .loading {
 	--colour1: var(--darkest);
 	--colour2: var(--highlight);
-	
+
+	position: relative;
 	width: 2rem;
 	height: 2rem;
 	margin: 1em;
 	border: 3px solid var(--colour1);
 	border-radius: 50%;
-	position: absolute;
-	bottom: 0;
-	right: 0;
-	align-self: flex-end;
 
 	&::before {
 		content: '';
@@ -22,11 +19,11 @@
 		border-top: 3px solid var(--colour2);
 		border-right: 3px solid var(--colour2);
 		border-radius: 50%;
-		animation: spin 750ms infinite;
+		animation: load-spin 750ms infinite;
 	}
 }
 
-@keyframes spin {
+@keyframes load-spin {
 	0% {border-top: 3px solid var(--colour2); border-right: 3px solid var(--colour2); border-bottom: none; border-left: none;}
 	25% {border-right: 3px solid var(--colour2); border-bottom: 3px solid var(--colour2); border-left: none; border-top: none;}
 	50% {border-bottom: 3px solid var(--colour2); border-left: 3px solid var(--colour2); border-top: none; border-right: none;}

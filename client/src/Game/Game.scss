@@ -1,13 +1,221 @@
 .game {
 	grid-area: main;
-	padding: 5% 30%;
+	background-color: var(--darker);
+	display: grid;
+	grid-template-columns: 1fr auto 250px auto 1fr;
+	grid-template-rows: auto auto 400px 1fr;
+	grid-template-areas:
+		".	mapname	statbars	menu 		."
+		".	display	statbars	menu		."
+		".	display	view			menu		."
+		".	chatbox	chatbox		chatbox	.";
+}
+
+.canvas {
+	grid-area: display;
 	background-color: var(--light);
+}
+
+.map-name {
+	grid-area: mapname;
+	cursor: default;
+	user-select: none;
+	background-color: var(--dark);
+	color: var(--light);
+	font-size: 1.5rem;
+	text-align: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.status-box {
+	grid-area: statbars;
+	padding: 2em 0.5em 0.5em;
+	background-color: var(--dark);
+	
+	&__statbars {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+
+	&__statbar {
+		height: 100%;
+		
+		&-empty {
+			height: 16px;
+			margin: 0.25em;
+			background-color: #00000055;
+		}
+	}
+	
+	&__spell-cooldowns {
+		display: flex;
+		justify-content: space-evenly;
+		align-items: center;
+	}
+
+	&__spell-cooldown {
+		width: 48px;
+		height: 48px;
+		margin: 1.25em 0.5em 0;
+		border-radius: 50%;
+		background-color: #f80;
+		background-image: radial-gradient(ellipse at top, #ff0, #f80);
+	}
+}
+
+.game-menu {
+	grid-area: menu;
+	background-color: var(--dark);
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	text-align: center;
+	align-items: center;
+
+	&__btn {
+		min-width: 135px;
+		margin: 1em;
+		padding: 0.25em 0.5em;
+		cursor: pointer;
+		user-select: none;
+		border: 2px solid var(--darkest-trans);
+		box-shadow: 8px 8px 8px var(--darkest);
+		background-color: var(--darkest-trans);
+		color: var(--light-trans);
+		font-family: var(--main-font);
+		font-size: 1.5rem;
+		
+		&:hover {
+			border: 2px solid var(--darker);
+			box-shadow: 6px 6px 6px var(--darkest);
+			background-color: var(--darker);
+			color: var(--light);
+		}
+		
+		&--active {
+			border: 2px solid var(--highlight);
+			box-shadow: 6px 6px 6px var(--darkest);
+			background-color: var(--darker);
+			color: var(--light);
+			&:hover {
+				border: 2px solid var(--highlight);
+			}
+		}
+	}
 }
 
-.game-window {
-	background-color: #000;
+.chatbox {
+	grid-area: chatbox;
+	background-color: var(--darkest);
+}
+
+.profile {
+	grid-area: view;
+	background-color: #777;
+}
+
+.stats {
+	grid-area: view;
+	background-color: #777;
+}
+
+.inventory {
+	grid-area: view;
+	padding: 1em;
+	background-color: #777;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	
+	&__slots {
+		display: grid;
+		margin-bottom: 0.5em;
+		grid-template-columns: repeat(5, auto);
+	}
+
+	&__slot {
+		width: calc(var(--tilesize) + 2px);
+		height: calc(var(--tilesize) + 2px);
+		margin: 1px;
+		cursor: pointer;
+		background-color: var(--darkest-trans);
+
+		&--selected {
+			background-color: var(--highlight-trans);
+		}
+	}
+
+	&__equipment {
+		display: flex;
+		margin-bottom: 1em;
+	}
+
+	&__preview {
+		width: 100%;
+		min-height: 128px;
+		padding: 0.5em;
+		background-color: var(--dark);
+		display: grid;
+		grid-template-columns: auto 1fr;
+		grid-template-rows: auto 1fr;
+		grid-template-areas:
+			"slot name"
+			"desc	desc";
+		justify-content: center;
+
+		&-slot {
+			grid-area: slot;
+			width: var(--tilesize);
+			height: var(--tilesize);
+			background-color: var(--darkest-trans);
+		}
+		&-name {
+			grid-area: name;
+			align-self: center;
+			margin: 0 0.5em;
+			cursor: default;
+			user-select: none;
+			color: var(--light-trans);
+		}
+		&-description {
+			grid-area: desc;
+			margin-top: 0.5em;
+			cursor: default;
+			user-select: none;
+			color: var(--light-trans);
+		}
+	}
+}
+
+.clans {
+	grid-area: view;
+	background-color: #777;
+}
+
+.logout {
+	grid-area: view;
+	padding: 0.5em;
+	background-color: #777;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+
+	&__text {
+		margin: 0.5em;
+		cursor: default;
+		user-select: none;
+		text-align: center;
+	}
+
+	&__btn {
+		margin: 0.5em;
+		padding: 0.5em 1em;
+		cursor: pointer;
+		user-select: none;
+		font-size: 1.5rem;
+	}
 }

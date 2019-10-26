@@ -140,12 +140,9 @@
 	position: relative;
 
 	&:hover {
-		background-color: var(--darker);
 		border: 2px solid var(--highlight);
 		box-shadow: 6px 6px 6px var(--darkest);
-	}
-	&:hover > &__delete {
-		opacity: 1;
+		background-color: var(--darker);
 	}
 
 	&__delete {
@@ -164,6 +161,10 @@
 			color: var(--warning) !important;
 		}
 	};
+
+	&:hover > &__delete {
+		opacity: 1;
+	}
 
 	&__sprite {
 		margin: 0.5em;

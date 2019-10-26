@@ -23,12 +23,12 @@ const SocketHandler = (props) => {
 		socket.on('logOut', success => {
 			if (success) dispatch({ type: 'logOut' });
 		});
-	}, []);
+	}, [dispatch]);
 
 	// Connect to socket server if signed in
 	useEffect(() => {
 		if (socket) socketHandler(socket);
-	}, [socket]);
+	}, [socket, socketHandler]);
 
 	return (
 		<>

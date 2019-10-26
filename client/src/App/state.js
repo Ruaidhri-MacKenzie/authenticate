@@ -33,10 +33,8 @@ const reducer = (state, action) => {
 const Context = createContext();
 
 export const ContextProvider = ({ children }) => {
-	const contextReducer = useReducer(reducer, initialState);
-
 	return (
-		<Context.Provider value={contextReducer}>
+		<Context.Provider value={useReducer(reducer, initialState)}>
 			{children}
 		</Context.Provider>
 	);

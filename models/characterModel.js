@@ -10,6 +10,7 @@ const characterSchema = new mongoose.Schema({
 	x: { type: Number, default: 0, min: 0, max: 11 },
 	y: { type: Number, default: 0, min: 0, max: 11 },
 	direction: { type: String, default: 'down', enum: ['left', 'right', 'up', 'down'] },
+	inventory: { type: [Object], default: [] },
 	
 	user: {type: mongoose.SchemaTypes.ObjectId, ref: 'User', required: true },
 	createDate: { type: Date, default: Date.now },

@@ -1,6 +1,6 @@
 const Character = require('../models/characterModel');
 
-const characterSelect = '_id name role level sprite map x y direction user createDate lastLoginDate';
+const characterSelect = '_id name role level sprite map x y direction inventory user createDate lastLoginDate';
 const characterInfoSelect = '_id name role level sprite user';
 
 const characterController = {};

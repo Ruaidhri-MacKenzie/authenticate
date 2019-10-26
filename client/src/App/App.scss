@@ -34,17 +34,24 @@
 	text-align: center;
 
 	&__copyright {
-		color: var(--light);
+		color: var(--darkest);
 		cursor: default;
 		user-select: none;
+		transition: color 1s ease-in;
 	}
-	
+
 	&__link {
 		text-decoration: none;
-		color: var(--light);
-
+		color: var(--darkest);
+		transition: color 1s ease-in;
+		
 		&:hover {
 			text-decoration: underline;
 		}
+	}
+
+	&:hover > &__copyright,
+	&:hover &__link {
+		color: var(--light);
 	}
 }

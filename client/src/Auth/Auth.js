@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './Auth.scss';
 import axios from 'axios';
 import socketIOClient from 'socket.io-client';
@@ -12,10 +12,10 @@ const Auth = () => {
 	const [state, dispatch] = useGlobalState();
 	if (state) {}
 
-	const signIn = user => {
+	const signIn = useCallback(user => {
 		const socket = socketIOClient(config.SERVER_URI);
 		dispatch({ type: 'signIn', user, socket });
-	};
+	}, [dispatch]);
 
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
@@ -38,7 +38,7 @@ const Auth = () => {
 			if (response) signIn(response.data);
 		})
 		.catch(err => console.log(err));
-	}, []);
+	}, [signIn]);
 
 	const validateInputs = ({ username, password, email }) => {
 		if (!username) {

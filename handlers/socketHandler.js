@@ -25,8 +25,9 @@ const socketHandler = socket => {
 	
 	// Player commands
 	socket.on('logIn', async id => {
-		// Read from database, add to player list, start receiving updates
-		socket.emit('logIn', true);
+		const player = await characterController.read(id);
+		// TODO: add to player list, start receiving updates
+		socket.emit('logIn', player);
 	});
 	socket.on('logOut', async id => {
 		// Remove from player list, stop receiving updates, save to database
